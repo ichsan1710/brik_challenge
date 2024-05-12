@@ -1,71 +1,36 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import TableItem from "../components/TableItem";
-import Swal from "sweetalert2";
+import { deleteProductById, fetchData } from "../features/productSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Home() {
-  const [products, setProducts] = useState([]);
-  const [page, setPage] = useState();
   const [params, setParams] = useState({});
 
-  function handlePage(number) {
+  const products = useSelector((state) => state.products.list);
+  const page = useSelector((state) => state.products.page);
+  const dispatch = useDispatch();
+
+  const handlePage = (number) => {
     setParams({
       ...params,
       "page[number]": number,
     });
-  }
+  };
 
   let totalPage = [];
   for (let i = 1; i <= page; i++) {
     totalPage.push(i);
   }
 
-  async function fetchData() {
-    try {
-      const { data } = await axios({
-        method: "get",
-        url: "http://localhost:3000/products",
-        headers: {
-          Authorization: "Bearer " + localStorage.access_token,
-        },
-        params: params,
-      });
-
-      setPage(data.totalPage);
-      setProducts(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
-    fetchData();
+    dispatch(fetchData(params));
   }, [params]);
 
-  async function handleDelete(id) {
-    try {
-      await axios({
-        method: "delete",
-        url: `http://localhost:3000/products/${id}`,
-        headers: {
-          Authorization: "Bearer " + localStorage.access_token,
-        },
-      });
-
-      fetchData();
-      Swal.fire({
-        text: "Product has been deleted",
-        icon: "success",
-      });
-    } catch (error) {
-      Swal.fire({
-        text: error.response.data.message,
-        icon: "error",
-      });
-    }
-  }
+  const handleDelete = (id) => {
+    dispatch(deleteProductById(id));
+  };
 
   return (
     <div className="container-fluid">
@@ -94,7 +59,6 @@ function Home() {
               style={{ cursor: "pointer" }}
               onClick={() => {
                 handlePage(1);
-                window.scrollTo(0, 0);
               }}>
               «
             </li>
@@ -104,7 +68,6 @@ function Home() {
                 key={item}
                 onClick={() => {
                   handlePage(item);
-                  window.scrollTo(0, 0);
                 }}
                 name="page[number]"
                 style={{ cursor: "pointer" }}>
@@ -116,7 +79,6 @@ function Home() {
               style={{ cursor: "pointer" }}
               onClick={() => {
                 handlePage(totalPage.length);
-                window.scrollTo(0, 0);
               }}>
               »
             </li>

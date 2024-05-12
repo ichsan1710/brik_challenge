@@ -4,6 +4,7 @@ import {
   redirect,
   RouterProvider,
 } from "react-router-dom";
+import { Provider } from "react-redux";
 import MainLayout from "./components/MainLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -11,6 +12,7 @@ import Home from "./pages/Home";
 import AddProduct from "./pages/AddProduct";
 import Categories from "./pages/Categories";
 import UpdateProduct from "./pages/UpdateProduct";
+import store from "./store.js";
 
 const router = createBrowserRouter([
   {
@@ -63,7 +65,13 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </>
+  );
 }
 
 export default App;

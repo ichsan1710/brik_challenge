@@ -1,31 +1,13 @@
-import { useState, useEffect } from "react";
-import Swal from "sweetalert2";
-import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchData } from "../features/categorySlice";
 
 function Categories() {
-  const [data, setData] = useState([]);
-
-  async function fetchData() {
-    try {
-      const { data } = await axios({
-        method: "get",
-        url: "http://localhost:3000/categories",
-        headers: {
-          Authorization: "Bearer " + localStorage.access_token,
-        },
-      });
-
-      setData(data);
-    } catch (error) {
-      Swal.fire({
-        text: error.response.data.message,
-        icon: "error",
-      });
-    }
-  }
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories.list);
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchData());
   }, []);
 
   return (
@@ -53,7 +35,7 @@ function Categories() {
                       </tr>
                     </thead>
                     <tbody id="table-category">
-                      {data.map((item, index) => (
+                      {categories.map((item, index) => (
                         <tr key={item.id}>
                           <td
                             scope="row"

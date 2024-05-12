@@ -1,28 +1,14 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import Form from "../components/Form";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchData } from "../features/categorySlice";
 
 function AddProduct() {
-  const [dataCategories, setDataCategories] = useState([]);
-
-  async function fetchData() {
-    try {
-      const { data } = await axios({
-        method: "get",
-        url: "http://localhost:3000/categories",
-        headers: {
-          Authorization: "Bearer " + localStorage.access_token,
-        },
-      });
-
-      setDataCategories(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories.list);
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchData());
   }, []);
 
   return (
@@ -34,7 +20,7 @@ function AddProduct() {
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 className="display-2">New Product</h1>
           </div>
-          <Form dataCategories={dataCategories} />
+          <Form dataCategories={categories} />
         </main>
       </div>
     </div>

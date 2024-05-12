@@ -5,12 +5,7 @@ function TableItem({ products, handleDelete }) {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const confirmDelete = (productId) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this item?",
-    );
-    if (isConfirmed) {
-      handleDelete(productId);
-    }
+    handleDelete(productId);
   };
   return (
     <div className="table-responsive">

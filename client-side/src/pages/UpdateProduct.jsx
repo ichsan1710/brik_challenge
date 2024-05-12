@@ -1,54 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDataById } from "../features/productSlice";
+import { fetchData } from "../features/categorySlice";
 import Form from "../components/Form";
 
 function UpdateProduct() {
   const { id } = useParams();
 
-  const [dataProduct, setDataProduct] = useState(null);
-  const [dataCategories, setDataCategories] = useState([]);
-
-  async function fetchDataById() {
-    try {
-      const { data } = await axios({
-        method: "get",
-        url: `http://localhost:3000/products/${id}`,
-        headers: {
-          Authorization: "Bearer " + localStorage.access_token,
-        },
-      });
-
-      setDataProduct(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const dispatch = useDispatch();
+  const productById = useSelector((state) => state.products.list);
+  const categories = useSelector((state) => state.categories.list);
 
   useEffect(() => {
     if (id) {
-      fetchDataById();
+      dispatch(fetchDataById(id));
     }
   }, [id]);
 
-  async function fetchData() {
-    try {
-      const { data } = await axios({
-        method: "get",
-        url: "http://localhost:3000/categories",
-        headers: {
-          Authorization: "Bearer " + localStorage.access_token,
-        },
-      });
-
-      setDataCategories(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
-    fetchData();
+    dispatch(fetchData());
   }, []);
 
   return (
@@ -62,8 +33,8 @@ function UpdateProduct() {
               <h1 className="display-2">Update Product</h1>
             </div>
             <Form
-              dataProduct={dataProduct}
-              dataCategories={dataCategories}
+              dataProduct={productById}
+              dataCategories={categories}
             />
           </main>
         </div>
