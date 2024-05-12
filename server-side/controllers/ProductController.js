@@ -3,7 +3,7 @@ const { Product } = require("../models/index.js");
 class ProductController {
   static async createProduct(req, res, next) {
     try {
-      req.body.authorId = req.user.id;
+      req.body.AuthorId = req.user.id;
       const product = await Product.create(req.body);
 
       res.status(201).json(product);

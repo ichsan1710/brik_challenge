@@ -13,7 +13,6 @@ function SideBar() {
               <Link
                 to={"/home"}
                 className="nav-link"
-                href=""
                 id="nav-product">
                 Products
               </Link>
@@ -22,7 +21,6 @@ function SideBar() {
               <Link
                 to={"/categories"}
                 className="nav-link"
-                href=""
                 id="nav-category">
                 Categories
               </Link>
@@ -39,7 +37,6 @@ function SideBar() {
                   navigate("/");
                 }}
                 className="nav-link"
-                href=""
                 id="nav-logout">
                 Logout
               </button>

@@ -7,6 +7,20 @@ import Swal from "sweetalert2";
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState();
+  const [params, setParams] = useState({});
+
+  function handlePage(number) {
+    setParams({
+      ...params,
+      "page[number]": number,
+    });
+  }
+
+  let totalPage = [];
+  for (let i = 1; i <= page; i++) {
+    totalPage.push(i);
+  }
 
   async function fetchData() {
     try {
@@ -16,8 +30,10 @@ function Home() {
         headers: {
           Authorization: "Bearer " + localStorage.access_token,
         },
+        params: params,
       });
 
+      setPage(data.totalPage);
       setProducts(data);
     } catch (error) {
       console.log(error);
@@ -26,7 +42,7 @@ function Home() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [params]);
 
   async function handleDelete(id) {
     try {
@@ -68,10 +84,43 @@ function Home() {
               </button>
             </Link>
           </div>
-          {/* <TableItem
-            products={products}
+          <TableItem
+            products={products.data}
             handleDelete={handleDelete}
-          /> */}
+          />
+          <ul className="pagination mb-5 mt-3 justify-content-center">
+            <li
+              className="page-item px-4 py-2 rounded-start"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                handlePage(1);
+                window.scrollTo(0, 0);
+              }}>
+              «
+            </li>
+            {totalPage.map((item) => (
+              <li
+                className="page-item px-4 py-2"
+                key={item}
+                onClick={() => {
+                  handlePage(item);
+                  window.scrollTo(0, 0);
+                }}
+                name="page[number]"
+                style={{ cursor: "pointer" }}>
+                {item}
+              </li>
+            ))}
+            <li
+              className="page-item px-4 py-2 rounded-end"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                handlePage(totalPage.length);
+                window.scrollTo(0, 0);
+              }}>
+              »
+            </li>
+          </ul>
         </main>
       </div>
     </div>

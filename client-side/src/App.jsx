@@ -8,6 +8,9 @@ import MainLayout from "./components/MainLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
+import AddProduct from "./pages/AddProduct";
+import Categories from "./pages/Categories";
+import UpdateProduct from "./pages/UpdateProduct";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +19,18 @@ const router = createBrowserRouter([
       {
         path: "/home",
         element: <Home />,
+      },
+      {
+        path: "/add",
+        element: <AddProduct />,
+      },
+      {
+        path: "/categories",
+        element: <Categories />,
+      },
+      {
+        path: "/edit/:id",
+        element: <UpdateProduct />,
       },
     ],
     loader: () => {
